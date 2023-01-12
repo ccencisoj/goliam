@@ -1,7 +1,6 @@
-import { CreateUser } from "./CreateUser";
 import { Request, Response } from "express";
+import { CreateUser } from "./CreateUser";
 import { CreateUserDTO } from "./CreateUserDTO";
-import { UserMapper } from "../../mappers/UserMapper";
 import { getTokenFromRequest } from "../../helpers/getTokenFromRequest";
 import { handleControllerError } from "../../helpers/handleControllerError";
 
@@ -11,16 +10,12 @@ export class CreateUserController {
       const reqToken = getTokenFromRequest(req);
 
       const reqData = {
-        token: reqToken,
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
+        token: reqToken
       } as CreateUserDTO;
 
-      const user = await CreateUser.execute(reqData);
-      const userJSON = UserMapper.toJSON(user);
+      await CreateUser.execute(reqData);
 
-      res.json({user: userJSON});
+      res.json({success: true});
 
     }catch(error) {
       handleControllerError(req, res, error);

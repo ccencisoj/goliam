@@ -25,16 +25,16 @@ createFile(`./src/mappers/${capitalizedValue}Mapper.ts`, `
 `);
 
 createFile(`./src/repositories/${capitalizedValue}Repository.ts`, `
-  import { ${capitalizedValue} } from "../entities/${capitalizedValue}";
   import { Schema, model } from "mongoose";
-  import { MongoRepository } from "../common/MongoRepository";
+  import { ${capitalizedValue} } from "../entities/${capitalizedValue}";
+  import { MongoRepository } from "./MongoRepository/MongoRepository";
 
   const ${capitalizedValue}Schema = new Schema<${capitalizedValue}>({
     id: {type: String, required: true},
     createdAt: {type: String, required: true},
     updatedAt: {type: String, required: true},
     deletedAt: {type: String, required: false},
-    isDeleted: {type: String, required: true}
+    isDeleted: {type: Boolean, required: true}
   })
 
   const ${capitalizedValue}Model = model("${capitalizedValue}", ${capitalizedValue}Schema);

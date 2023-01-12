@@ -1,4 +1,3 @@
-const { camelCaseValue, removeFile } = require("macrox");
+const { camelCaseValue, removeDir } = require("macrox");
 
-removeFile(`./src/validators/${camelCaseValue}.ts`);
-removeFile(`./src/validators/${camelCaseValue}.test.ts`);
+removeDir(`./src/validators/${camelCaseValue}`);

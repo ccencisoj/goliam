@@ -52,21 +52,3 @@ src
 ```node delete-use-case CreateUser```
 
 - Eliminará la carpeta ```CreateUser``` de ```src/useCases```
-
-#### Validators
-
-```node create-validator validateId```
-
-- Creará ```validateId.ts``` en ```src/validators```
-- Creará ```validateId.test.ts``` en ```src/validators```
-
-```
-src
-  validators
-    validateId.t
-    validateId.test.ts
-```
-
-
-
-

@@ -1,8 +1,0 @@
-PUT http://localhost:4000/api/users/501ce2b3-0f55-4bfe-9b35-456489b703dc
-Authorization: Bearer token
-Content-Type: application/json
-
-{
-  "username": "Cristian",
-  "email": "b@gmail.com"
-}

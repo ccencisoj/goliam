@@ -1,5 +1,5 @@
-import { UpdateUser } from "./UpdateUser";
 import { Request, Response } from "express";
+import { UpdateUser } from "./UpdateUser";
 import { UpdateUserDTO } from "./UpdateUserDTO";
 import { getTokenFromRequest } from "../../helpers/getTokenFromRequest";
 import { handleControllerError } from "../../helpers/handleControllerError";
@@ -10,10 +10,7 @@ export class UpdateUserController {
       const reqToken = getTokenFromRequest(req);
 
       const reqData = {
-        token: reqToken,
-        userId: req.params.id,
-        username: req.body.username,
-        email: req.body.email
+        token: reqToken
       } as UpdateUserDTO;
 
       await UpdateUser.execute(reqData);

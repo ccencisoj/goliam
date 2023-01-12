@@ -1,5 +1,5 @@
-import { DeleteUser } from "./DeleteUser";
 import { Request, Response } from "express";
+import { DeleteUser } from "./DeleteUser";
 import { DeleteUserDTO } from "./DeleteUserDTO";
 import { getTokenFromRequest } from "../../helpers/getTokenFromRequest";
 import { handleControllerError } from "../../helpers/handleControllerError";
@@ -10,8 +10,7 @@ export class DeleteUserController {
       const reqToken = getTokenFromRequest(req);
 
       const reqData = {
-        token: reqToken,
-        userId: req.params.id
+        token: reqToken
       } as DeleteUserDTO;
 
       await DeleteUser.execute(reqData);
