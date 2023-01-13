@@ -1,6 +1,6 @@
 import { Model } from "mongoose";
-import { IEntity } from "../../common/IEntity";
-import { IRepository } from "../../common/IRepository";
+import { IEntity } from "./IEntity";
+import { IRepository } from "./IRepository";
 
 export class MongoRepository<Entity extends IEntity> implements IRepository<Entity> {
   public readonly model: Model<Entity>;

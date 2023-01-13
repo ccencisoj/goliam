@@ -24,10 +24,10 @@ createFile(`./src/mappers/${capitalizedValue}Mapper.ts`, `
 
 `);
 
-createFile(`./src/repositories/${capitalizedValue}Repository.ts`, `
+createFile(`./src/repositories/${capitalizedValue}Repository/${capitalizedValue}Repository.ts`, `
   import { Schema, model } from "mongoose";
-  import { ${capitalizedValue} } from "../entities/${capitalizedValue}";
-  import { MongoRepository } from "./MongoRepository/MongoRepository";
+  import { ${capitalizedValue} } from "../../entities/${capitalizedValue}";
+  import { MongoRepository } from "../../common/MongoRepository";
 
   const ${capitalizedValue}Schema = new Schema<${capitalizedValue}>({
     id: {type: String, required: true},
@@ -42,5 +42,28 @@ createFile(`./src/repositories/${capitalizedValue}Repository.ts`, `
   const ${capitalizedValue}Repository = new MongoRepository<${capitalizedValue}>(${capitalizedValue}Model);
 
   export { ${capitalizedValue}Repository };
+
+`);
+
+createFile(`./src/repositories/${capitalizedValue}Repository/${capitalizedValue}Repository.test.ts`, `
+  import { UserRepository } from "./UserRepository";
+  
+`);
+
+createFile(`./src/repositories/${capitalizedValue}Repository/${capitalizedValue}Repository.spec.ts`, `
+  import { UserRepository } from "./UserRepository";
+  
+`);
+
+createFile(`./src/repositories/${capitalizedValue}Repository/README.md`, `
+  # ${capitalizedValue}Repository
+
+  Aqui va una descripción...
+
+  ${"```"}typescript
+  ${capitalizedValue}Repository.save(${camelCaseValue}: ${capitalizedValue}): Promise<void>;
+  ${capitalizedValue}Repository.findOne(filter: any): Promise<${capitalizedValue}>;
+  ${capitalizedValue}Repository.findMany(filter: any, skip?: number, limit?: number): Promise<${capitalizedValue}[]>;
+  ${"```"}
 
 `);

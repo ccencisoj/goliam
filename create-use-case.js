@@ -79,6 +79,12 @@ createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}Controller.ts`
 
 createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.test.ts`, `
   import { ${capitalizedValue} } from "./${capitalizedValue}";
+  import { GenericContainer } from "testcontainers";
+
+`);
+
+createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.spec.ts`, `
+  import { ${capitalizedValue} } from "./${capitalizedValue}";
   import { ${capitalizedValue}DTO } from "./${capitalizedValue}DTO";
   import { hasPermission } from "../../helpers/hasPermission";
   import { ${capitalizedValue}Validator } from "./${capitalizedValue}Validator";
@@ -92,39 +98,48 @@ createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.test.ts`, `
   const mocked${capitalizedValue}Validator = jest.mocked(${capitalizedValue}Validator);
   const mockedHasPermission = jest.mocked(hasPermission);
 
-  describe("Success", ()=> { })
-
-  describe("Failure", ()=> {
-    test("Invalid DTO", async ()=> {
-      // Failure reason of the DTO validation
-      mocked${capitalizedValue}Validator.validateDTO.mockImplementation(()=> {
-        return Promise.resolve(ValidationResult.error("Invalid DTO"));
-      })
-    
-      const resultPromise = ${capitalizedValue}.execute({} as ${capitalizedValue}DTO);
-
-      await expect(resultPromise).rejects.toBeInstanceOf(ValidationException);
+  test("${capitalizedValue}.execute should throw ValidationException if the dto contain a invalid value", async ()=> {
+    // Simulate that the dto contain a invalid value
+    mocked${capitalizedValue}Validator.validateDTO.mockImplementation(()=> {
+      return Promise.resolve(ValidationResult.error("Invalid DTO"));
     })
 
-    test("Without permissions", async ()=> {
-      // Success reason of the DTO validation
-      mocked${capitalizedValue}Validator.validateDTO.mockImplementation(()=> {
-        return Promise.resolve(ValidationResult.ok());
-      })
+    const resultPromise = ${capitalizedValue}.execute({} as ${capitalizedValue}DTO);
 
-      // Failure reason of the permissions check
-      mockedHasPermission.mockImplementation(()=> {
-        return Promise.resolve(false);
-      })
-    
-      const resultPromise = ${capitalizedValue}.execute({} as ${capitalizedValue}DTO);
+    await expect(resultPromise).rejects.toBeInstanceOf(ValidationException);
+  })
 
-      await expect(resultPromise).rejects.toBeInstanceOf(RequiredPermissionException);
+  test("${capitalizedValue}.execute should throw RequiredPermissionException if the token doesn't has '${capitalizedValue}' permission", async ()=> {
+    // Simulate that the dto contain a invalid value
+    mocked${capitalizedValue}Validator.validateDTO.mockImplementation(()=> {
+      return Promise.resolve(ValidationResult.ok());
     })
+
+    // Simulate that the token doesn't has '${capitalizedValue}' permission
+    mockedHasPermission.mockImplementation(()=> {
+      return Promise.resolve(false);
+    })
+
+    const resultPromise = ${capitalizedValue}.execute({} as ${capitalizedValue}DTO);
+
+    await expect(resultPromise).rejects.toBeInstanceOf(RequiredPermissionException);
   })
 
 `);
 
-createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.http`, ``);
+createFile(`./src/useCases/${capitalizedValue}/README.md`, `
+  # ${capitalizedValue}
 
-createFile(`./src/useCases/${capitalizedValue}/README.md`, ``);
+  Aqui va una descripción...
+
+  ${"```"}typescript 
+  ${capitalizedValue}.execute(dto: ${capitalizedValue}DTO): Promise<void>;
+  ${"```"}
+
+  ## Permisos requeridos
+
+  ${"```"}${capitalizedValue}${"```"}
+
+`);
+
+createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.http`, ``);
