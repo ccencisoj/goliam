@@ -2,8 +2,8 @@ const { value, toCamelCaseValue, toCapitalizedValue, createFile } = require("mac
 
 const deep = value.includes("/") ? "../../../" : "../../";
 const dirname = value.includes("/") ? value.split("/")[0] : "";
-const camelCaseValue = value.includes("/") ? value.split("/")[1] : toCamelCaseValue(value);
-const capitalizedValue = value.includes("/") ? value.split("/")[1] : toCapitalizedValue(value);
+const camelCaseValue = value.includes("/") ? toCamelCaseValue(value.split("/")[1]) : toCamelCaseValue(value);
+const capitalizedValue = value.includes("/") ? toCapitalizedValue(value.split("/")[1]) : toCapitalizedValue(value);
 
 createFile(`./src/useCases/${dirname}/${capitalizedValue}/${capitalizedValue}.ts`, `
   import { ${capitalizedValue}DTO } from "./${capitalizedValue}DTO";
