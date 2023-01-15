@@ -1,3 +1,6 @@
-const { capitalizedValue, removeDir } = require("macrox");
+const { value, toCapitalizedValue, removeDir } = require("macrox");
 
-removeDir(`./src/useCases/${capitalizedValue}`);
+const dirname = value.includes("/") ? value.split("/")[0] : "";
+const capitalizedValue = value.includes("/") ? value.split("/")[1] : toCapitalizedValue(value);
+
+removeDir(`./src/useCases/${dirname}/${capitalizedValue}`);

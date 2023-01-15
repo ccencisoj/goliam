@@ -1,11 +1,16 @@
-const { capitalizedValue, createFile, camelCaseValue } = require("macrox");
+const { value, toCamelCaseValue, toCapitalizedValue, createFile } = require("macrox");
 
-createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.ts`, `
+const deep = value.includes("/") ? "../../../" : "../../";
+const dirname = value.includes("/") ? value.split("/")[0] : "";
+const camelCaseValue = value.includes("/") ? value.split("/")[1] : toCamelCaseValue(value);
+const capitalizedValue = value.includes("/") ? value.split("/")[1] : toCapitalizedValue(value);
+
+createFile(`./src/useCases/${dirname}/${capitalizedValue}/${capitalizedValue}.ts`, `
   import { ${capitalizedValue}DTO } from "./${capitalizedValue}DTO";
-  import { hasPermission } from "../../helpers/hasPermission";
+  import { hasPermission } from "${deep}helpers/hasPermission";
   import { ${capitalizedValue}Validator } from "./${capitalizedValue}Validator";
-  import { ValidationException } from "../../exceptions/ValidationException";
-  import { RequiredPermissionException } from "../../exceptions/RequiredPermissionException";
+  import { ValidationException } from "${deep}exceptions/ValidationException";
+  import { RequiredPermissionException } from "${deep}exceptions/RequiredPermissionException";
 
   type Response = Promise<void>;
 
@@ -28,9 +33,9 @@ createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.ts`, `
 
 `);
 
-createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}Validator.ts`, `
+createFile(`./src/useCases/${dirname}/${capitalizedValue}/${capitalizedValue}Validator.ts`, `
   import { ${capitalizedValue}DTO } from "./${capitalizedValue}DTO";
-  import { ValidationResult } from "../../common/ValidationResult";
+  import { ValidationResult } from "${deep}common/ValidationResult";
 
   type Response = Promise<ValidationResult>;
 
@@ -42,19 +47,19 @@ createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}Validator.ts`,
 
 `);
 
-createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}DTO.ts`, `
+createFile(`./src/useCases/${dirname}/${capitalizedValue}/${capitalizedValue}DTO.ts`, `
   export interface ${capitalizedValue}DTO {
     token: string;
   }
 
 `);
 
-createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}Controller.ts`, `
+createFile(`./src/useCases/${dirname}/${capitalizedValue}/${capitalizedValue}Controller.ts`, `
   import { Request, Response } from "express";
   import { ${capitalizedValue} } from "./${capitalizedValue}";
   import { ${capitalizedValue}DTO } from "./${capitalizedValue}DTO";
-  import { getTokenFromRequest } from "../../helpers/getTokenFromRequest";
-  import { handleControllerError } from "../../helpers/handleControllerError";
+  import { getTokenFromRequest } from "${deep}helpers/getTokenFromRequest";
+  import { handleControllerError } from "${deep}helpers/handleControllerError";
 
   export class ${capitalizedValue}Controller {
     public static execute = async (req: Request, res: Response): Promise<void> => {
@@ -77,23 +82,23 @@ createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}Controller.ts`
 
 `);
 
-createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.test.ts`, `
+createFile(`./src/useCases/${dirname}/${capitalizedValue}/${capitalizedValue}.test.ts`, `
   import { ${capitalizedValue} } from "./${capitalizedValue}";
   import { GenericContainer } from "testcontainers";
 
 `);
 
-createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.spec.ts`, `
+createFile(`./src/useCases/${dirname}/${capitalizedValue}/${capitalizedValue}.spec.ts`, `
   import { ${capitalizedValue} } from "./${capitalizedValue}";
   import { ${capitalizedValue}DTO } from "./${capitalizedValue}DTO";
-  import { hasPermission } from "../../helpers/hasPermission";
+  import { hasPermission } from "${deep}helpers/hasPermission";
   import { ${capitalizedValue}Validator } from "./${capitalizedValue}Validator";
-  import { ValidationResult } from "../../common/ValidationResult";
-  import { ValidationException } from "../../exceptions/ValidationException";
-  import { RequiredPermissionException } from "../../exceptions/RequiredPermissionException";
+  import { ValidationResult } from "${deep}common/ValidationResult";
+  import { ValidationException } from "${deep}exceptions/ValidationException";
+  import { RequiredPermissionException } from "${deep}exceptions/RequiredPermissionException";
 
   jest.mock("./${capitalizedValue}Validator");
-  jest.mock("../../helpers/hasPermission");
+  jest.mock("${deep}helpers/hasPermission");
 
   const mocked${capitalizedValue}Validator = jest.mocked(${capitalizedValue}Validator);
   const mockedHasPermission = jest.mocked(hasPermission);
@@ -127,7 +132,7 @@ createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.spec.ts`, `
 
 `);
 
-createFile(`./src/useCases/${capitalizedValue}/README.md`, `
+createFile(`./src/useCases/${dirname}/${capitalizedValue}/README.md`, `
   # ${capitalizedValue}
 
   Aqui va una descripción...
@@ -142,4 +147,4 @@ createFile(`./src/useCases/${capitalizedValue}/README.md`, `
 
 `);
 
-createFile(`./src/useCases/${capitalizedValue}/${capitalizedValue}.http`, ``);
+createFile(`./src/useCases/${dirname}/${capitalizedValue}/${capitalizedValue}.http`, ``);
