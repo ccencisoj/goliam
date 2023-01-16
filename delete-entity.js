@@ -1,5 +1,5 @@
-const { capitalizedValue, removeFile } = require("macrox");
+const { capitalizedValue, removeFile, removeDir } = require("macrox");
 
 removeFile(`./src/entities/${capitalizedValue}.ts`);
 removeFile(`./src/mappers/${capitalizedValue}Mapper.ts`);
-removeFile(`./src/repositories/${capitalizedValue}Repository`);
+removeDir(`./src/repositories/${capitalizedValue}Repository.ts`);
