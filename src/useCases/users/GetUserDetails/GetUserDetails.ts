@@ -1,24 +1,33 @@
+import { User } from "../../../entities/User";
 import { GetUserDetailsDTO } from "./GetUserDetailsDTO";
-import { hasPermission } from "../../../helpers/hasPermission";
-import { GetUserDetailsValidator } from "./GetUserDetailsValidator";
+import { GetUserDetailsGuard } from "./GetUserDetailsGuard";
+import { ValidationResult } from "../../../common/ValidationResult";
+import { UserRepository } from "../../../repositories/UserRepository";
+import { NoFoundException } from "../../../exceptions/NoFoundException";
 import { ValidationException } from "../../../exceptions/ValidationException";
-import { RequiredPermissionException } from "../../../exceptions/RequiredPermissionException";
 
-type Response = Promise<void>;
+type Response = Promise<User>;
 
 export class GetUserDetails {
   public static execute = async (dto: GetUserDetailsDTO): Response => {
-    const validationResult = await GetUserDetailsValidator.validateDTO(dto);
+    // Check permissions
+    await GetUserDetailsGuard.check(dto);
 
+    // Validate dto values
+    const validationResult = ValidationResult.combine([]);
+    
     if(validationResult.isError) {
       throw new ValidationException(validationResult.error);
     }
 
-    const getUserDetailsPermission = `GetUserDetails`;
-    const hasGetUserDetailsPermission = await hasPermission(dto.token, getUserDetailsPermission);
+    // Verify that the user exists
+    const user = await UserRepository.findOne({id: dto.userId});
+    const userFound = !!user;
 
-    if(!hasGetUserDetailsPermission) {
-      throw new RequiredPermissionException(getUserDetailsPermission);
+    if(!userFound) {
+      throw new NoFoundException(`User no found`);
     }
+
+    return user;
   }
 }

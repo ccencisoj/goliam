@@ -1,9 +1,12 @@
-import "dotenv/config";
-import mongoose from "mongoose";
+import dotenv from "dotenv-flow";
 import express, { Router } from "express";
+import { Database } from "./common/Database";
+import { GetUsersController } from "./useCases/users/GetUsers/GetUsersController";
+import { CreateUserController } from "./useCases/users/CreateUser/CreateUserController";
+
+dotenv.config();
 
 const PORT = process.env.PORT;
-const MONGO_URI = process.env.MONGO_URI;
 
 (async ()=> {
   const server = express();
@@ -11,11 +14,12 @@ const MONGO_URI = process.env.MONGO_URI;
 
   apiRouter.use(express.json());
 
+  apiRouter.get("/users", GetUsersController.execute);
+  apiRouter.post("/users", CreateUserController.execute);
+
   server.use("/api", apiRouter);
 
-  mongoose.set("strictQuery", false);
-
-  await mongoose.connect(MONGO_URI);
+  await Database.connect();
 
   server.listen(PORT, ()=> {
     console.log(`Server running on port ${PORT}`);

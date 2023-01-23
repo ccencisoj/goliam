@@ -1,3 +1,4 @@
 export interface DeleteUserDTO {
-  token: string;
+  token?: string;
+  userId: string;
 }

@@ -1,0 +1,10 @@
+POST http://localhost:4000/api/users
+Authorization: Bearer token
+Content-Type: application/json
+
+{
+  "type": "user",
+  "username": "luis",
+  "email": "luis@gmail.com",
+  "password": "1234"
+}

@@ -1,0 +1,2 @@
+GET http://localhost:4000/api/users?page=1&&searchValue=lu
+Authorization: Bearer token

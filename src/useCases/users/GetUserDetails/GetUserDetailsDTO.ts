@@ -1,3 +1,4 @@
 export interface GetUserDetailsDTO {
-  token: string;
+  token?: string;
+  userId: string;
 }

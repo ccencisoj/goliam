@@ -10,12 +10,18 @@ export class UpdateUserController {
       const reqToken = getTokenFromRequest(req);
 
       const reqData = {
-        token: reqToken
+        token: reqToken,
+        userId: req.params.id,
+        type: req.body.type,
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        newPassword: req.body.newPassword
       } as UpdateUserDTO;
 
       await UpdateUser.execute(reqData);
 
-      res.json({success: true});
+      res.json({updated: true});
 
     }catch(error) {
       handleControllerError(req, res, error);

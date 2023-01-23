@@ -1,24 +1,56 @@
+import { User } from "../../../entities/User";
 import { DeleteUserDTO } from "./DeleteUserDTO";
-import { hasPermission } from "../../../helpers/hasPermission";
-import { DeleteUserValidator } from "./DeleteUserValidator";
+import { DeleteUserGuard } from "./DeleteUserGuard";
+import { ServiceEvent } from "../../../common/ServiceEvent";
+import { validateId } from "../../../validators/validateId";
+import { ServiceEvents } from "../../../common/ServiceEvents";
+import { getCurrentDate } from "../../../helpers/getCurrentDate";
+import { UserRepository } from "../../../repositories/UserRepository";
+import { NoFoundException } from "../../../exceptions/NoFoundException";
 import { ValidationException } from "../../../exceptions/ValidationException";
-import { RequiredPermissionException } from "../../../exceptions/RequiredPermissionException";
 
 type Response = Promise<void>;
 
 export class DeleteUser {
   public static execute = async (dto: DeleteUserDTO): Response => {
-    const validationResult = await DeleteUserValidator.validateDTO(dto);
+    // Check permissions
+    await DeleteUserGuard.check(dto);
 
+    // Validate dto values
+    const validationResult = validateId(dto.userId);
+    
     if(validationResult.isError) {
       throw new ValidationException(validationResult.error);
     }
 
-    const deleteUserPermission = `DeleteUser`;
-    const hasDeleteUserPermission = await hasPermission(dto.token, deleteUserPermission);
+    // Verify that the user exists
+    const user = await UserRepository.findOne({id: dto.userId});
+    const userFound = !!user;
 
-    if(!hasDeleteUserPermission) {
-      throw new RequiredPermissionException(deleteUserPermission);
+    if(!userFound) {
+      throw new NoFoundException(`User no found`);
     }
+
+    const deletedUser = {
+      id: user.id,
+      type: user.type,
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      deletedAt: getCurrentDate(),
+      isDeleted: true
+    } as User;
+
+    await UserRepository.save(deletedUser);
+
+    // Dispatch integration event
+    const deletedUserEvent = new ServiceEvent({
+      name: "DeletedUser",
+      data: {user: deletedUser}
+    })
+  
+    ServiceEvents.dispatch(deletedUserEvent);
   }
 }

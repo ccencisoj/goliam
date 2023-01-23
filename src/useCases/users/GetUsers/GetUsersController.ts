@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
 import { GetUsers } from "./GetUsers";
+import { Request, Response } from "express";
 import { GetUsersDTO } from "./GetUsersDTO";
+import { UserMapper } from "../../../mappers/UserMapper";
 import { getTokenFromRequest } from "../../../helpers/getTokenFromRequest";
 import { handleControllerError } from "../../../helpers/handleControllerError";
 
@@ -10,12 +11,15 @@ export class GetUsersController {
       const reqToken = getTokenFromRequest(req);
 
       const reqData = {
-        token: reqToken
+        token: reqToken,
+        page: Number(req.query.page),
+        searchValue: req.query.searchValue
       } as GetUsersDTO;
 
-      await GetUsers.execute(reqData);
+      const { users, pagination } = await GetUsers.execute(reqData);
+      const usersJSON = users.map((user)=> UserMapper.toJSON(user));
 
-      res.json({success: true});
+      res.json({users: usersJSON, pagination});
 
     }catch(error) {
       handleControllerError(req, res, error);

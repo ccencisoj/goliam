@@ -12,10 +12,10 @@ export class CreateUserController {
 
       const reqData = {
         token: reqToken,
+        type: req.body.type,
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password,
-        type: req.body.type
+        password: req.body.password
       } as CreateUserDTO;
 
       const user = await CreateUser.execute(reqData);

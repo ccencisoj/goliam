@@ -1,25 +1,23 @@
 import { CreateUserDTO } from "./CreateUserDTO";
 import { hasPermission } from "../../../helpers/hasPermission";
-import { RequiredPermissionException } from "../../../exceptions/RequiredPermissionException";
+import { PermissionException } from "../../../exceptions/PermissionException";
 
 type Response = Promise<void>;
 
 export class CreateUserGuard {
   public static check = async (dto: CreateUserDTO): Response => {
-    // Check that the user has 'CreateUser' permission
     const createUserPermission = `CreateUser`;
     const hasCreateUserPermission = await hasPermission(dto.token, createUserPermission);
 
     if(!hasCreateUserPermission) {
-      throw new RequiredPermissionException(createUserPermission);
+      throw new PermissionException(`Required permission '${createUserPermission}'`);
     }
 
-    // Check that the user has 'CreateUserType/<type>' permission
-    const createUserTypePermission = `CreateUser/Type/${dto.type}`;
-    const hasCreateUserTypePermission = await hasPermission(dto.token, createUserTypePermission);
+    const setTypePermission = `CreateUser/Type/${dto.type}`;
+    const hasSetTypePermission = await hasPermission(dto.token, setTypePermission);
 
-    if(!hasCreateUserTypePermission) {
-      throw new RequiredPermissionException(createUserTypePermission);
+    if(!hasSetTypePermission) {
+      throw new PermissionException(`Required permission '${setTypePermission}'`);
     }
   }
 }

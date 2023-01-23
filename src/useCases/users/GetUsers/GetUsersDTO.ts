@@ -1,3 +1,5 @@
 export interface GetUsersDTO {
-  token: string;
+  token?: string;
+  page?: number;
+  searchValue?: string;
 }

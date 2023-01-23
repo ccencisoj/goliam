@@ -1,1 +1,0 @@
-import { validateUserType } from "./validateUserType";

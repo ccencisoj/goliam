@@ -5,7 +5,3 @@ Aqui va una descripción...
 ```typescript 
 GetUsers.execute(dto: GetUsersDTO): Promise<void>;
 ```
-
-## Permisos requeridos
-
-```GetUsers```
