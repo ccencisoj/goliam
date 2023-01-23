@@ -1,12 +1,12 @@
 import { Policy } from "../../src/entities/Policy";
+import { generateString } from "./helpers/generateString";
 import { generateId } from "../../src/helpers/generateId";
-import { getRandomNumber } from "./helpers/getRandomNumber";
-import { getRandomString } from "./helpers/getRandomString";
+import { generateNumber } from "./helpers/generateNumber";
 import { getCurrentDate } from "../../src/helpers/getCurrentDate";
 
 export const createMockPolicy = ()=> {
-  const str = getRandomString();
-  const num = getRandomNumber();
+  const str = generateString();
+  const num = generateNumber();
   const mockPolicy = {
     id: generateId(),
     name: `name${str}${num}`,

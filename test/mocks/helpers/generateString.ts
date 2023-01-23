@@ -1,5 +1,5 @@
 import Randomstring from "randomstring"
 
-export const getRandomString = ()=> {
+export const generateString = ()=> {
   return Randomstring.generate({length: 5, charset: "alphabetic"}).toLowerCase();
 }

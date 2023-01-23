@@ -1,10 +1,10 @@
 import { User } from "../../src/entities/User";
 import { generateId } from "../../src/helpers/generateId";
-import { getRandomString } from "./helpers/getRandomString";
+import { generateString } from "./helpers/generateString";
 import { getCurrentDate } from "../../src/helpers/getCurrentDate";
 
 export const createMockUser = ()=> {
-  const str = getRandomString();
+  const str = generateString();
   const mockuser = {
     id: generateId(),
     type: "user",
